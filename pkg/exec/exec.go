@@ -91,7 +91,7 @@ func getClientsets(ctx context.Context) *Clientsets {
 }
 
 // execCmdInToolPodDebug exec command on specific pod and wait the command's output.
-func execCmdInToolPodDebug(commandStr string)  (string, string, error)  {
+func ExecCmdInToolPodDebug(commandStr string)  (string, string, error)  {
 	ctx := context.TODO()
 	clientsets := getClientsets(ctx)
 	podNamespace := "rook-ceph"

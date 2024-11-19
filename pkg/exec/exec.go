@@ -51,7 +51,7 @@ type Clientsets struct {
 	Dynamic dynamic.Interface
 }
 
-func getClientsets(ctx context.Context) *Clientsets {
+func GetClientsets(ctx context.Context) *Clientsets {
 	var err error
 	var kubeContext string
 	clientsets := &Clientsets{}
@@ -93,7 +93,7 @@ func getClientsets(ctx context.Context) *Clientsets {
 // execCmdInToolPodDebug exec command on specific pod and wait the command's output.
 func ExecCmdInToolPodDebug(commandStr string)  (string, string, error)  {
 	ctx := context.TODO()
-	clientsets := getClientsets(ctx)
+	clientsets := GetClientsets(ctx)
 	podNamespace := "rook-ceph"
 	clusterNamespace := "rook-ceph"
     var stdout, stderr io.Writer = &bytes.Buffer{}, &bytes.Buffer{}
@@ -126,7 +126,7 @@ func ExecCmdInToolPodDebug(commandStr string)  (string, string, error)  {
 
 	exec, err := remotecommand.NewSPDYExecutor(clientsets.KubeConfig, "POST", req.URL())
 	if err != nil {
-		return "a", "a", fmt.Errorf("failed to create SPDYExecutor. %w", err)
+		return "out_err", "err", fmt.Errorf("failed to create SPDYExecutor. %w", err)
 	}
 
 	// returnOutput is true, the command's output will be print on shell directly with os.Stdout or os.Stderr
@@ -146,7 +146,7 @@ func ExecCmdInToolPodDebug(commandStr string)  (string, string, error)  {
 		})
 	}
 	if err != nil {
-		return "a", "a", fmt.Errorf("failed to run command. %w", err)
+		return "out_err", "err", fmt.Errorf("failed to run command. %w", err)
 	}
 	outputSting := stdout.(*bytes.Buffer)
 	return outputSting.String(), "" , nil
